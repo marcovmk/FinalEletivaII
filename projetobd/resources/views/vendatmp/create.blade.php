@@ -53,10 +53,10 @@
         </div>
 
         <!-- Campo Total (Não editável) -->
-        <div class="row mt-3">
+        <div class="row">
             <div class="col">
                 <label for="total" class="form-label">Total da Venda:</label>
-                <input type="text" id="total" class="form-control" name="total" readonly />
+                <input type="number" id="total" class="form-control" name="total" readonly />
             </div>
         </div>
 
