@@ -37,14 +37,14 @@
                             <div class="card-body text-center">
                                 <h5 class="card-title">Vendas</h5>
                                 <ul class="list-unstyled">
-                                    <li><a href="{{ route('venda.index') }}" class="text-dark">Visualizar Vendas</a></li>
-                                    <li><a href="{{ route('venda.create') }}" class="text-dark">Adicionar Nova Venda</a></li>
-                                    <li><a href="{{ route('venda.grafico') }}" class="text-dark">Gráfico de Vendas</a></li>
+                                    <li><a href="{{ route('vendatmp.index') }}" class="text-dark">Visualizar Vendas</a></li>
+                                    <li><a href="{{ route('vendatmp.create') }}" class="text-dark">Adicionar Nova Venda</a></li>
+
                                 </ul>
                             </div>
                         </div>
                     </div>   
-                                    
+
                 </div>
             </div>
         </div>

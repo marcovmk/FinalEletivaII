@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\VendaTmp;
 use App\Models\Cliente;
 use App\Models\Produto;
+use App\Models\VendaProduto;
 
 class VendaTmpController extends Controller
 {
@@ -26,8 +27,11 @@ class VendaTmpController extends Controller
      */
     public function create()
     {
-        $cliente = Cliente::all();
-        return view('vendatmp.create', compact('cliente'));
+        $produtos = Produto::all();
+        $clientes = Cliente::all();
+
+        // Passar as variáveis para a view
+        return view('vendatmp.create', compact('produtos', 'clientes'));
     }
 
     /**
@@ -35,24 +39,30 @@ class VendaTmpController extends Controller
      */
     public function store(Request $request)
     {
-        // Validação dos dados recebidos
-        $request->validate([
-            'cliente_id' => 'required|exists:clientes,id', // Valida que o cliente existe
-            'nome_funcionario' => 'required|string|max:255',
-            'total' => 'required|numeric',
+        // Criar a venda
+        $vendaTmp = VendaTmp::create([
+            'cliente_id' => $request->input('cliente_id'),
+            'nome_funcionario' => $request->input('nome_funcionario'),
+            'ttotal' => $request->input('total'),
         ]);
 
-        // Criação de uma nova venda temporária
-        VendaTmp::create([
-            'cliente_id' => $request->cliente_id,
-            'nome_funcionario' => $request->nome_funcionario,
-            'total' => $request->total,
-        ]);
+        // Aqui, pegamos os produtos, as quantidades e valores do request
+        $produtosIds = $request->input('produtos_id'); // Array de ids de produtos
+        $quantidades = $request->input('qtde'); // Array de quantidades
+        $valores = $request->input('valor'); // Array de valores
 
-        // Redireciona para a lista de vendas temporárias
-        return redirect()->route('vendatmp.index')->with('success', 'Venda criada com sucesso!');
+        // Para cada produto, associamos à venda
+        foreach ($produtosIds as $key => $produtoId) {
+            Vendaproduto::create([
+                'vendatmps_id' => $vendaTmp->id,      // ID da venda registrada
+                'produtos_id' => $produtoId,          // ID do produto
+                'qtde' => $quantidades[$key],         // Quantidade do produto
+                'valor' => $valores[$key],            // Valor do produto
+            ]);
+        }
+        return redirect('/vendatmp'); // Ou redirecionar para a página desejada
     }
-
+ 
     /**
      * Display the specified resource.
      */

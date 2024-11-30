@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Vendaproduto;  // Modelo de venda de produto
+use App\Models\Vendaproduto;
 use App\Models\Produto;
-use App\Models\Categoria;
 use App\Models\VendaTmp;
 use App\Models\Cliente;
 use Illuminate\Http\Request;
