@@ -7,44 +7,42 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f8f9fa; /* Cor de fundo suave */
+            background-image: url('/images/naregua2.jpg'); /* Caminho da imagem */
+            background-size: cover; /* Para cobrir toda a área */
+            background-position: center; /* Para centralizar a imagem */
+            height: 100vh; /* Para garantir que o fundo ocupe toda a altura da tela */
         }
-        .card {
-            border-radius: 1rem; /* Borda arredondada para o card */
+        .btn-custom {
+            background-color: #6c757d; /* Cor de fundo cinza */
+            color: white; /* Cor do texto */
+            border: none; /* Remove borda */
+            border-radius: 0.5rem; /* Bordas arredondadas */
+            transition: background-color 0.3s; /* Transição suave */
         }
-        .card-body {
-            padding: 2rem; /* Padding mais espaçoso dentro do card */
+        .btn-custom:hover {
+            background-color: #5a6268; /* Tom mais escuro ao passar o mouse */
         }
-        .btn {
-            width: 100%; /* Botões ocupam a largura total do card */
-            margin-bottom: 0.5rem; /* Espaçamento entre botões */
-        }
-        .card-title {
-            margin-bottom: 1.5rem; /* Espaçamento abaixo do título do card */
+        .buttons-container {
+            margin-top: 400px; /* Ajuste a margem superior conforme necessário */
+            text-align: center; /* Centraliza o texto dos botões */
         }
     </style>
 </head>
 <body>
 
 <div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="col-md-4">
-        <div class="card shadow-lg">
-            <div class="card-body">
-                <h5 class="card-title text-center">Sistema de Controle de Estoque</h5>
-                @auth
-                    <a href="/dashboard" class="btn btn-primary">
-                        Acessar área restrita
-                    </a>
-                @else
-                    <a href="/login" class="btn btn-primary">
-                        Acessar o sistema
-                    </a>
-                    <a href="/register" class="btn btn-primary">
-                        Crie sua conta
-                    </a>
-                @endauth
-            </div>
-        </div>
+    <div class="col-md-4 buttons-container"> 
+        @auth
+            <!-- Se o usuário estiver autenticado, não exibe nada -->
+        @else
+            <!-- Se o usuário não estiver autenticado, exibe os botões de acesso -->
+            <a href="/login" class="btn btn-custom mb-2"> 
+                Acessar o sistema
+            </a>
+            <a href="/register" class="btn btn-custom mb-2">
+                Crie sua conta
+            </a>
+        @endauth
     </div>
 </div>
 

@@ -2,20 +2,36 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\VendaTmp;
+use App\Models\Vendaproduto;  // Modelo de venda de produto
 use App\Models\Produto;
-use App\Models\Cliente;
 use App\Models\Categoria;
+use App\Models\VendaTmp;
+use App\Models\Cliente;
+use Illuminate\Http\Request;
 
-class VendaProdutoController extends Controller
+class VendaprodutoController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        // Carregar todos os produtos vendidos com a categoria e o cliente da venda
+        $vendasProdutos = Vendaproduto::with(['produto', 'venda'])->get();
+
+        return view('vendaproduto.index', compact('vendasProdutos'));
+        $dadosVendasPorProduto = Vendaproduto::selectRaw('produtos_id, SUM(qtde) as total_vendido')
+            ->groupBy('produtos_id')
+            ->with('produto') // Carregar informações do produto
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'produto' => $item->produto->nome, // Nome do produto
+                    'quantidade_vendida' => $item->total_vendido, // Quantidade vendida
+                ];
+            });
+
+        return view('grafico-vendas.index', compact('dadosVendasPorProduto'));
     }
 
     /**
@@ -23,7 +39,11 @@ class VendaProdutoController extends Controller
      */
     public function create()
     {
-        //
+        // Carregar todos os produtos, vendas e clientes disponíveis
+        $produtos = Produto::all();
+        $vendatmp = VendaTmp::all();
+        $clientes = Cliente::all();
+        return view('vendaproduto.create', compact('produtos', 'vendatmp', 'clientes'));
     }
 
     /**
@@ -31,7 +51,10 @@ class VendaProdutoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Criar a associação entre produto e venda
+        Vendaproduto::create($request->all());
+
+        return redirect('/vendaproduto');
     }
 
     /**
@@ -39,7 +62,10 @@ class VendaProdutoController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // Carregar uma venda de produto específica com os relacionamentos necessários
+        $vendaProduto = Vendaproduto::with(['produto', 'venda'])->findOrFail($id);
+
+        return view('vendaproduto.show', compact('vendaProduto'));
     }
 
     /**
@@ -47,7 +73,12 @@ class VendaProdutoController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // Carregar a venda de produto com os relacionamentos necessários
+        $vendaProduto = Vendaproduto::with(['produto', 'venda'])->findOrFail($id);
+        $produtos = Produto::all();
+        $vendatmp = Vendatmp::all();
+
+        return view('vendaproduto.edit', compact('produtos', 'vendatmp', 'clientes'));
     }
 
     /**
@@ -55,7 +86,11 @@ class VendaProdutoController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Atualizar a venda de produto
+        $vendaProduto = Vendaproduto::findOrFail($id);
+        $vendaProduto->update($request->all());
+
+        return redirect('/vendaproduto');
     }
 
     /**
@@ -63,6 +98,10 @@ class VendaProdutoController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // Excluir uma venda de produto
+        $vendaProduto = Vendaproduto::findOrFail($id);
+        $vendaProduto->delete();
+
+        return redirect('/vendaproduto');
     }
 }

@@ -12,8 +12,19 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                    <!-- Cadastro Dropdown -->
+                    <x-nav-link :href="route('produto.index')" :active="request()->routeIs('produtos.*')">
+                        {{ __('Produtos') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('categoria.index')" :active="request()->routeIs('categorias.*')">
+                        {{ __('Categorias') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('cliente.index')" :active="request()->routeIs('clientes.*')">
+                        {{ __('Clientes') }}
+                    </x-nav-link>
+                    
+                    <x-nav-link :href="route('vendatmp.index')" :active="request()->routeIs('vendatmp.*')">
+                        {{ __('Venda Temporária') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -35,7 +46,7 @@
 
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
+                            {{ __('Perfil') }}
                         </x-dropdown-link>
 
                         <!-- Authentication -->
@@ -45,7 +56,7 @@
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
                                                 this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Sair') }}
                             </x-dropdown-link>
                         </form>
                     </x-slot>
@@ -67,8 +78,23 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+            <!-- Cadastro Links -->
+            <x-responsive-nav-link :href="route('produtos.index')" :active="request()->routeIs('produtos.*')">
+                {{ __('Produtos') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('categorias.index')" :active="request()->routeIs('categorias.*')">
+                {{ __('Categorias') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('clientes.index')" :active="request()->routeIs('clientes.*')">
+                {{ __('Clientes') }}
+            </x-responsive-nav-link>
+
+            <!-- Vendas Links -->
+            <x-responsive-nav-link :href="route('vendaprodutos.index')" :active="request()->routeIs('vendaprodutos.*')">
+                {{ __('Vendas de Produtos') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('vendatmp.index')" :active="request()->routeIs('vendatmp.*')">
+                {{ __('Venda Temporária') }}
             </x-responsive-nav-link>
         </div>
 
@@ -81,7 +107,7 @@
 
             <div class="mt-3 space-y-1">
                 <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
+                    {{ __('Perfil') }}
                 </x-responsive-nav-link>
 
                 <!-- Authentication -->
@@ -91,7 +117,7 @@
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                        {{ __('Log Out') }}
+                        {{ __('Sair') }}
                     </x-responsive-nav-link>
                 </form>
             </div>

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\VendaTmp;
 use App\Models\Cliente;
+use App\Models\Produto;
 
 class VendaTmpController extends Controller
 {
@@ -12,7 +14,7 @@ class VendaTmpController extends Controller
      */
     public function index()
     {
-        $vendatmp = Produto::with('cliente')->get();
+        $vendatmp = VendaTmp::with('cliente')->get();
         //Encadear o método WITH CASO tenha relacionamento com mais de uma model
         //Exemplo:
         //$produto = Produto::with('categoria')->with('vendedor')->get();
@@ -33,8 +35,22 @@ class VendaTmpController extends Controller
      */
     public function store(Request $request)
     {
-        Vendatmp::create($request->all());
-        return redirect('/vendatmp');
+        // Validação dos dados recebidos
+        $request->validate([
+            'cliente_id' => 'required|exists:clientes,id', // Valida que o cliente existe
+            'nome_funcionario' => 'required|string|max:255',
+            'total' => 'required|numeric',
+        ]);
+
+        // Criação de uma nova venda temporária
+        VendaTmp::create([
+            'cliente_id' => $request->cliente_id,
+            'nome_funcionario' => $request->nome_funcionario,
+            'total' => $request->total,
+        ]);
+
+        // Redireciona para a lista de vendas temporárias
+        return redirect()->route('vendatmp.index')->with('success', 'Venda criada com sucesso!');
     }
 
     /**
@@ -42,7 +58,7 @@ class VendaTmpController extends Controller
      */
     public function show(string $id)
     {
-        $vendatmp = Vendatmp::with('cliente')->findOrFail($id);
+        $vendatmp = VendaTmp::with('cliente')->findOrFail($id);
         //Encadear o método WITH CASO tenha relacionamento com mais de uma model
         //Exemplo:
         //$produto = Produto::with('categoria')->with('vendedor')->findOrFail($id);
@@ -54,7 +70,7 @@ class VendaTmpController extends Controller
      */
     public function edit(string $id)
     {
-        $vendatmp = Vendatmp::with('cliente')->findOrFail($id);
+        $vendatmp = VendaTmp::with('cliente')->findOrFail($id);
         //Encadear o método WITH CASO tenha relacionamento com mais de uma model
         //Exemplo:
         //$produto = Produto::with('categoria')->with('vendedor')->findOrFail($id);
@@ -67,7 +83,7 @@ class VendaTmpController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $vendatmp = Vendatmp::findOrFail($id);
+        $vendatmp = VendaTmp::findOrFail($id);
         $vendatmp->update($request->all());
         return redirect('/vendatmp');
     }
@@ -77,7 +93,7 @@ class VendaTmpController extends Controller
      */
     public function destroy(string $id)
     {
-        $vendatmp = Vendatmp::findOrFail($id);
+        $vendatmp = VendaTmp::findOrFail($id);
         $vendatmp->delete();
         return redirect('/vendatmp');
     }
